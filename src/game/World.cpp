@@ -661,7 +661,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_INSTANCE_UNLOAD_DELAY,    "Instance.UnloadDelay", 30 * MINUTE * IN_MILLISECONDS);
     setConfig(CONFIG_UINT32_INSTANCE_PER_HOUR_LIMIT, "Instance.PerHourLimit", MAX_INSTANCE_PER_ACCOUNT_PER_HOUR);
 
-    setConfig(CONFIG_UINT32_MAX_PRIMARY_TRADE_SKILL, "MaxPrimaryTradeSkill", 2);
+    setConfig(CONFIG_UINT32_MAX_PRIMARY_TRADE_SKILL, "MaxPrimaryTradeSkill", 10);
     setConfigMinMax(CONFIG_UINT32_MIN_PETITION_SIGNS, "MinPetitionSigns", 9, 0, 9);
 
     setConfig(CONFIG_UINT32_GM_LOGIN_STATE,       "GM.LoginState",    2);
