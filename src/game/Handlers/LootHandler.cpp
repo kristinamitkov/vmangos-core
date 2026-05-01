@@ -315,7 +315,7 @@ void WorldSession::HandleLootMoneyOpcode(NullClientPacket const& /*packet*/)
                     playersNear.push_back(playerGroup);
             }
 
-            uint32 moneyPerPlayer = uint32((pLoot->gold) / (playersNear.size()));
+            uint32 moneyPerPlayer = uint32(pLoot->gold);
 
             for (const auto i : playersNear)
             {
