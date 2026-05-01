@@ -388,8 +388,7 @@ bool LootItem::AllowedForPlayer(Player const* player, WorldObject const* lootTar
     if (needs_quest)
     {
         // Checking quests for quest-only drop (check only quests requirements in this case)
-        if (!player->HasQuestForItem(itemid))
-            return false;
+        return player->HasQuestForItem(itemid);
     }
     else
     {
