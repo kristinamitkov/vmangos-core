@@ -344,7 +344,7 @@ LootItem::LootItem(LootStoreItem const& li)
     conditionId = li.conditionId;
 
     ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itemid);
-    freeforall  = proto && ((proto->Flags & ITEM_FLAG_PARTY_LOOT) || needs_quest);
+    freeforall  = proto && ((proto->Flags & ITEM_FLAG_PARTY_LOOT) || li.needs_quest);
 
     needs_quest = li.needs_quest;
 
@@ -362,7 +362,7 @@ LootItem::LootItem(uint32 itemid_, uint32 count_, int32 randomPropertyId_)
     conditionId = 0;
 
     ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itemid);
-    freeforall  = proto && ((proto->Flags & ITEM_FLAG_PARTY_LOOT) || needs_quest);
+    freeforall  = proto && (proto->Flags & ITEM_FLAG_PARTY_LOOT);
 
     needs_quest = false;
 
@@ -584,7 +584,7 @@ QuestItemList* Loot::FillFFALoot(Player const* player)
     for (uint8 i = 0; i < items.size(); ++i)
     {
         LootItem &item = items[i];
-        if (!item.is_looted && item.freeforall && item.AllowedForPlayer(player, GetLootTarget()))
+        if (!item.is_looted && !item.needs_quest && item.freeforall && item.AllowedForPlayer(player, GetLootTarget()))
         {
             ql->emplace_back(i);
             ++unlootedCount;
@@ -648,7 +648,7 @@ QuestItemList* Loot::FillNonQuestNonFFAConditionalLoot(Player const* player)
     for (uint8 i = 0; i < items.size(); ++i)
     {
         LootItem &item = items[i];
-        if (!item.is_looted && !item.freeforall && item.conditionId && item.AllowedForPlayer(player, GetLootTarget()))
+        if (!item.is_looted && !item.needs_quest && !item.freeforall && item.conditionId && item.AllowedForPlayer(player, GetLootTarget()))
         {
             ql->emplace_back(i);
             if (!item.is_counted)
