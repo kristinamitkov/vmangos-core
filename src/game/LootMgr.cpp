@@ -344,7 +344,7 @@ LootItem::LootItem(LootStoreItem const& li)
     conditionId = li.conditionId;
 
     ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itemid);
-    freeforall  = proto && (proto->Flags & ITEM_FLAG_PARTY_LOOT);
+    freeforall  = proto && ((proto->Flags & ITEM_FLAG_PARTY_LOOT) || needs_quest);
 
     needs_quest = li.needs_quest;
 
@@ -362,7 +362,7 @@ LootItem::LootItem(uint32 itemid_, uint32 count_, int32 randomPropertyId_)
     conditionId = 0;
 
     ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itemid);
-    freeforall  = proto && (proto->Flags & ITEM_FLAG_PARTY_LOOT);
+    freeforall  = proto && ((proto->Flags & ITEM_FLAG_PARTY_LOOT) || needs_quest);
 
     needs_quest = false;
 
@@ -469,7 +469,7 @@ void Loot::AddItem(LootStoreItem const& item)
     if (proto && !proto->Discovered)
         proto->Discovered = true;
 
-    if (item.needs_quest && proto && (proto->Flags & ITEM_FLAG_PARTY_LOOT))
+    if (item.needs_quest && proto)
         m_hasFFAQuestItems = true;
 
     if (item.needs_quest)                                   // Quest drop
