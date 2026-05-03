@@ -579,7 +579,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_CLEAN_CHARACTER_DB, "CharacterDatabaseCleanup.Enable", true);
     setConfig(CONFIG_UINT32_CHARDB_CLEANUP_FLAGS, "CharacterDatabaseCleanup.Flags", CharacterDatabaseCleaner::CLEANING_FLAG_CHARACTERS | CharacterDatabaseCleaner::CLEANING_FLAG_PETS | CharacterDatabaseCleaner::CLEANING_FLAG_ITEMS);
     setConfig(CONFIG_UINT32_REUSABLE_GUID_POOL_SIZE, "ReusableGuidPoolSize", 100000);
-    setConfig(CONFIG_BOOL_GRID_UNLOAD, "GridUnload", true);
+    setConfig(CONFIG_BOOL_GRID_UNLOAD, "GridUnload", false);
     setConfig(CONFIG_BOOL_CLEANUP_TERRAIN, "CleanupTerrain", true);
     setConfigPos(CONFIG_UINT32_INTERVAL_SAVE, "PlayerSave.Interval", 15 * MINUTE * IN_MILLISECONDS);
     setConfigMinMax(CONFIG_UINT32_MIN_LEVEL_STAT_SAVE, "PlayerSave.Stats.MinLevel", 0, 0, MAX_LEVEL);
