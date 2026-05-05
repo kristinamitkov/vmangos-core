@@ -228,6 +228,8 @@ pAuraProcHandler AuraProcHandler[TOTAL_AURAS] =
     &Unit::HandleNULLProc,                                  //189 SPELL_AURA_MOD_RATING
     &Unit::HandleNULLProc,                                  //190 SPELL_AURA_MOD_FACTION_REPUTATION_GAIN
     &Unit::HandleNULLProc,                                  //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
+    &Unit::HandleNULLProc,                                  //192 SPELL_AURA_ALLOW_ANY_FORM
+    &Unit::HandleNULLProc,                                  //193 SPELL_AURA_ABILITY_IGNORE_AURASTATE
 };
 
 // Fonctions Nostalrius
