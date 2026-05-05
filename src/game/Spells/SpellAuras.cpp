@@ -256,6 +256,9 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraModUseNormalSpeed,                     //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
     // Nostalrius - custom
     &Aura::HandleAuraAuraSpell,
+    // Custom
+    &Aura::HandleNoImmediateEffect,                         // 193 SPELL_AURA_ALLOW_ANY_FORM      implemented in Spell::CheckCast
+    &Aura::HandleNoImmediateEffect,                         // 193 SPELL_AURA_ABILITY_IGNORE_AURASTATE      implemented in Spell::CheckCast
 };
 
 static AuraType const frozenAuraTypes[] = { SPELL_AURA_MOD_ROOT, SPELL_AURA_MOD_STUN, SPELL_AURA_NONE };
@@ -8113,6 +8116,8 @@ void Aura::HandleAuraAuraSpell(bool apply, bool real)
     else
         target->RemoveAurasDueToSpell(spell);
 }
+
+// Custom
 
 
 // Exclusive Auras

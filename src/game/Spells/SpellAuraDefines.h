@@ -329,7 +329,10 @@ enum AuraType
     SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED = 191,
     // Nostalrius
     SPELL_AURA_AURA_SPELL = 192, // Ajoute les auras d'un sort tant que cet aura est actif.
-    TOTAL_AURAS=193
+    // Custom
+    SPELL_AURA_ALLOW_ANY_FORM = 193,
+    SPELL_AURA_ABILITY_IGNORE_AURASTATE = 194,
+    TOTAL_AURAS=195
 };
 
 enum AreaAuraType

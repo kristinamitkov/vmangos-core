@@ -5393,20 +5393,53 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (bg->GetStatus() == STATUS_WAIT_LEAVE)
                     return SPELL_FAILED_DONT_REPORT;
 
+        // Form/shape/stance check
         if (strict && m_casterUnit)
         {
-            if (m_casterUnit->IsInCombat() && m_spellInfo->IsNonCombatSpell())
-                return SPELL_FAILED_AFFECTING_COMBAT;
+            bool checkForm = true;
+            Unit::AuraList const& auras = m_casterUnit->GetAurasByType(SPELL_AURA_ALLOW_ANY_FORM);
+            for (Aura* aura : auras)
+            {
+                if (!aura)
+                    continue;
+                if (!aura->IsAffectedOnSpell(m_spellInfo))
+                    continue;
+                checkForm = false;
+                break;
+            }
+            if (checkForm)
+            {
+                SpellCastResult shapeError = m_spellInfo->GetErrorAtShapeshiftedCast(m_casterUnit->GetShapeshiftForm());
+                if (shapeError != SPELL_CAST_OK)
+                    return shapeError;
 
-            if (m_isClientStarted && !ValidateExplicitTargetMask())
-                return SPELL_FAILED_BAD_TARGETS;
+                if ((m_spellInfo->Attributes & SPELL_ATTR_ONLY_STEALTHED) && !(m_casterUnit->HasStealthAura()))
+                    return SPELL_FAILED_ONLY_STEALTHED;
+            }
+        }
 
-            SpellCastResult shapeError = m_spellInfo->GetErrorAtShapeshiftedCast(m_casterUnit->GetShapeshiftForm());
-            if (shapeError != SPELL_CAST_OK)
-                return shapeError;
+        // Combat check
+        if (strict && m_casterUnit)
+        {
+            bool checkCombat = true;
+            Unit::AuraList const& auras = m_casterUnit->GetAurasByType(SPELL_AURA_ABILITY_IGNORE_AURASTATE);
+            for (Aura* aura : auras)
+            {
+                if (!aura)
+                    continue;
+                if (!aura->IsAffectedOnSpell(m_spellInfo))
+                    continue;
+                checkCombat = false;
+                break;
+            }
+            if (checkCombat)
+                {
+                if (m_casterUnit->IsInCombat() && m_spellInfo->IsNonCombatSpell())
+                    return SPELL_FAILED_AFFECTING_COMBAT;
 
-            if ((m_spellInfo->Attributes & SPELL_ATTR_ONLY_STEALTHED) && !(m_casterUnit->HasStealthAura()))
-                return SPELL_FAILED_ONLY_STEALTHED;
+                if (m_isClientStarted && !ValidateExplicitTargetMask())
+                    return SPELL_FAILED_BAD_TARGETS;
+            }
         }
     }
 
