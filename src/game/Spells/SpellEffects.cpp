@@ -182,7 +182,7 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS] =
     &Spell::EffectPlayerPull,                               //124 SPELL_EFFECT_PLAYER_PULL              opposite of knockback effect (pulls player twoard caster)
     &Spell::EffectModifyThreatPercent,                      //125 SPELL_EFFECT_MODIFY_THREAT_PERCENT
     &Spell::EffectUnused,                                   //126 SPELL_EFFECT_126                      future spell steal effect? now only used one test spell
-    &Spell::EffectUnused,                                   //127 SPELL_EFFECT_127                      future Prospecting spell, not have spells
+    &Spell::EffectProspecting,                              //127 SPELL_EFFECT_PROSPECTING
     &Spell::EffectApplyAreaAura,                            //128 SPELL_EFFECT_APPLY_AREA_AURA_FRIEND
     &Spell::EffectApplyAreaAura,                            //129 SPELL_EFFECT_APPLY_AREA_AURA_ENEMY
     &Spell::EffectDespawnObject,                            //130 SPELL_EFFECT_DESPAWN_OBJECT
@@ -4998,13 +4998,46 @@ void Spell::EffectDisEnchant(SpellEffectIndex /*effIdx*/)
     if (!itemTarget || !itemTarget->GetProto()->DisenchantID)
         return;
 
-    Player* pCaster = static_cast<Player*>(m_caster);
+    Player* pCaster = m_caster->ToPlayer();
+    if (!pCaster)
+        return;
 
     itemTarget->SetBinding(true);
     pCaster->UpdateCraftSkill(m_spellInfo->Id);
     pCaster->SendLoot(itemTarget->GetObjectGuid(), LOOT_DISENCHANTING);
 
     // item will be removed at disenchanting end
+}
+
+void Spell::EffectProspecting(SpellEffectIndex /*effIdx*/)
+{
+    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    if (!itemTarget || !itemTarget->GetProto())
+        return;
+
+    if (itemTarget->GetCount() < 5)
+        return;
+
+    const uint32 _itemID = itemTarget->GetProto()->ItemId;
+    if (!((_itemID == 2770) || (_itemID == 2771) || (_itemID == 2772) || (_itemID == 3858) || (_itemID == 10620)))
+        return;
+
+    // const uint32 _itemCount = itemTarget->GetCount();
+
+    Player* pCaster = m_caster->ToPlayer();
+    if (!pCaster)
+        return;
+
+    // itemTarget->SetBinding(true);
+    // pCaster->UpdateCraftSkill(m_spellInfo->Id);
+    pCaster->SendLoot(itemTarget->GetObjectGuid(), LOOT_PROSPECTING);
+
+    // 5 items will be removed at prospecting end
+
+    // if (_itemCount > 5)
+    //   itemTarget->SetBinding(false);
 }
 
 void Spell::EffectInebriate(SpellEffectIndex /*effIdx*/)

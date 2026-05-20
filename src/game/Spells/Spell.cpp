@@ -3128,6 +3128,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 case SPELL_EFFECT_ENCHANT_ITEM:
                 case SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY:
                 case SPELL_EFFECT_DISENCHANT:
+                case SPELL_EFFECT_PROSPECTING:
                 case SPELL_EFFECT_FEED_PET:
                     if (m_targets.getItemTarget())
                         AddItemTarget(m_targets.getItemTarget(), effIndex);
@@ -7426,6 +7427,47 @@ SpellCastResult Spell::CheckItems()
                 // must have disenchant loot (other static req. checked at item prototype loading)
                 if (!itemProto->DisenchantID || (itemProto->Flags & ITEM_FLAG_NO_DISENCHANT))
                     return SPELL_FAILED_CANT_BE_DISENCHANTED;
+
+                break;
+            }
+            case SPELL_EFFECT_PROSPECTING:
+            {
+                if (!m_caster || (!m_caster->IsPlayer()) || (!m_caster->ToPlayer()))
+                    return SPELL_FAILED_ERROR;
+
+                // if (!m_targets.getItemTarget() || m_targets.getItemTarget()->HasGeneratedLoot())
+                if (!m_targets.getItemTarget())
+                    return SPELL_FAILED_ITEM_GONE;
+
+                // prevent prospecting in trade slot
+                if (m_targets.getItemTarget()->GetOwnerGuid() != m_caster->GetObjectGuid())
+                    return SPELL_FAILED_NOT_TRADEABLE;
+
+                ItemPrototype const* itemProto = m_targets.getItemTarget()->GetProto();
+                if (!itemProto)
+                    return SPELL_FAILED_ITEM_GONE;
+
+                // Check for specific ore
+                if (!((itemProto->ItemId == 2770) || (itemProto->ItemId == 2771) || (itemProto->ItemId == 2772) || (itemProto->ItemId == 3858) || (itemProto->ItemId == 10620)))
+                    return SPELL_FAILED_CANT_BE_PROSPECTED;
+
+                // Check stack count requirement 5
+                if (m_targets.getItemTarget()->GetCount() < 5)
+                    return SPELL_FAILED_PROSPECT_NEED_MORE;
+
+                // uint32 redLevel = 1;
+                // switch (itemProto->ItemId)
+                // {
+                //     case 2770:  redLevel = 20;  break;
+                //     case 2771:  redLevel = 50;  break;
+                //     case 2772:  redLevel = 125; break;
+                //     case 3858:  redLevel = 175; break;
+                //     case 10620: redLevel = 250; break;
+                // }
+                // uint16 skillValue = m_caster->ToPlayer()->GetSkillValue(SKILL_PROSPECTING);
+
+                // if (skillValue < redLevel)
+                //     return SPELL_FAILED_LOW_CASTLEVEL;
 
                 break;
             }

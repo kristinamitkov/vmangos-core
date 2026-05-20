@@ -7882,6 +7882,10 @@ void Player::SendLoot(ObjectGuid guid, LootType lootType, Player const* pVictim)
                         loot->FillLoot(item->GetProto()->DisenchantID, LootTemplates_Disenchant, this, true);
                         item->SetLootState(ITEM_LOOT_TEMPORARY);
                         break;
+                    case LOOT_PROSPECTING:
+                        loot->FillLoot(item->GetProto()->ItemId, LootTemplates_Prospecting, this, true);
+                        item->SetLootState(ITEM_LOOT_TEMPORARY);
+                        break;
                     default:
                         loot->FillLoot(item->GetEntry(), LootTemplates_Item, this, true, item->GetProto()->MaxMoneyLoot == 0);
                         loot->GenerateMoneyLoot(item->GetProto()->MinMoneyLoot, item->GetProto()->MaxMoneyLoot);
@@ -8119,6 +8123,9 @@ void Player::SendLoot(ObjectGuid guid, LootType lootType, Player const* pVictim)
     // LOOT_SKINNING, LOOT_PROSPECTING, LOOT_INSIGNIA and LOOT_FISHINGHOLE unsupported by client
     switch (lootType)
     {
+        case LOOT_PROSPECTING:
+            lootType = LOOT_PICKPOCKETING;
+            break;
         case LOOT_SKINNING:
             lootType = LOOT_PICKPOCKETING;
             break;

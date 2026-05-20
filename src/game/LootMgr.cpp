@@ -43,6 +43,7 @@ static eConfigFloatValues const qualityToRate[MAX_ITEM_QUALITY] =
 
 LootStore LootTemplates_Creature(     "creature_loot_template",      "creature entry",                     true);
 LootStore LootTemplates_Disenchant(   "disenchant_loot_template",    "item disenchant id",                 true);
+LootStore LootTemplates_Prospecting(  "prospecting_loot_template",   "item prospecting id",                true);
 LootStore LootTemplates_Fishing(      "fishing_loot_template",       "area id",                            true);
 LootStore LootTemplates_Gameobject(   "gameobject_loot_template",    "gameobject lootid",                  true);
 LootStore LootTemplates_Item(         "item_loot_template",          "item entry with ITEM_FLAG_LOOTABLE", true);
@@ -1425,6 +1426,23 @@ void LoadLootTemplates_Disenchant()
     LootTemplates_Disenchant.ReportUnusedIds(ids_set);
 }
 
+void LoadLootTemplates_Prospecting()
+{
+    LootIdSet ids_set, ids_setUsed;
+    LootTemplates_Prospecting.LoadAndCollectLootIds(ids_set);
+
+    // remove real entries and check existence loot
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
+    {
+        if (ids_set.find(itr.second.ItemId) != ids_set.end())
+            ids_setUsed.insert(itr.second.ItemId);
+    }
+    for (const auto itr : ids_setUsed)
+        ids_set.erase(itr);
+    // output error for any still listed (not referenced from appropriate table) ids
+    LootTemplates_Prospecting.ReportUnusedIds(ids_set);
+}
+
 void LoadLootTemplates_Fishing()
 {
     LootIdSet ids_set;
@@ -1567,6 +1585,7 @@ void CheckLootTemplates_Reference(LootIdSet& ids_set)
     LootTemplates_Pickpocketing.CheckLootRefs(&ids_set);
     LootTemplates_Skinning.CheckLootRefs(&ids_set);
     LootTemplates_Disenchant.CheckLootRefs(&ids_set);
+    LootTemplates_Prospecting.CheckLootRefs(&ids_set);
     LootTemplates_Mail.CheckLootRefs(&ids_set);
     LootTemplates_Reference.CheckLootRefs(&ids_set);
     auto& usedIds = sBattleGroundMgr.GetUsedRefLootIds();

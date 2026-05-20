@@ -335,7 +335,7 @@ enum SpellEffects
     SPELL_EFFECT_PLAYER_PULL               = 124,
     SPELL_EFFECT_MODIFY_THREAT_PERCENT     = 125,
     SPELL_EFFECT_126                       = 126,
-    SPELL_EFFECT_127                       = 127,
+    SPELL_EFFECT_PROSPECTING               = 127,
     // Effets "backportes" depuis MaNGOS BC+.
     SPELL_EFFECT_APPLY_AREA_AURA_FRIEND    = 128,
     SPELL_EFFECT_APPLY_AREA_AURA_ENEMY     = 129,

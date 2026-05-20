@@ -174,6 +174,7 @@ class Spell
         void EffectLeapForward(SpellEffectIndex effIdx);
         void EffectTransmitted(SpellEffectIndex effIdx);
         void EffectDisEnchant(SpellEffectIndex effIdx);
+        void EffectProspecting(SpellEffectIndex effIdx);
         void EffectInebriate(SpellEffectIndex effIdx);
         void EffectFeedPet(SpellEffectIndex effIdx);
         void EffectDismissPet(SpellEffectIndex effIdx);
