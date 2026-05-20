@@ -551,6 +551,16 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
                     player->DestroyItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
                     break;
                 }
+                case LOOT_PROSPECTING:
+                {
+                    if (!pItem->loot.isLooted())
+                        player->AutoStoreLoot(pItem->loot); // can be lost if no space
+                    pItem->loot.clear();
+                    pItem->SetLootState(ITEM_LOOT_REMOVED);
+                    uint32 _count = 5;
+                    player->DestroyItemCount(pItem, _count, true);
+                    break;
+                }
                 // normal persistence loot
                 default:
                 {
