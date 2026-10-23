@@ -4116,6 +4116,19 @@ void Spell::update(uint32 difftime)
         {
             if (m_timer > 0)
             {
+                // Keep checking line of sight while channeling, for both player and NPC casters.
+                if (m_channeled && !m_spellInfo->HasAttribute(SPELL_ATTR_EX2_IGNORE_LINE_OF_SIGHT))
+                {
+                    if (Unit* target = m_targets.getUnitTarget())
+                    {
+                        if (target != m_caster && !m_caster->IsWithinLOSInMap(target))
+                        {
+                            cancel();
+                            return;
+                        }
+                    }
+                }
+
                 if (m_caster->IsPlayer() || m_caster->IsPet())
                 {
                     // check for incapacitating player states
